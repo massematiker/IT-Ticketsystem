@@ -6,4 +6,5 @@ services:
     image: camunda/camunda-bpm-platform
     ports:
       - 8080:8080
-
+    volumes:
+      - "./camunda:/camunda"

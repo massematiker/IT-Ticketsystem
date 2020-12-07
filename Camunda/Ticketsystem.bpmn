@@ -76,7 +76,7 @@
     <bpmn:userTask id="Schliese_ticket" name="Schließe Ticket">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="Datum behoben" label="Datum behoben" type="date" />
+          <camunda:formField id="Datum_behoben" label="Datum behoben" type="date" />
           <camunda:formField id="Loesung" label="Loesung" type="string" />
           <camunda:formField id="Bearbeiter" label="Bearbeiter" type="string" />
         </camunda:formData>
