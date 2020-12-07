@@ -7,4 +7,4 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - "./camunda/camunda-h2-dbs:/camunda/camunda-h2-dbs"
+      - "./camunda:/camunda"
