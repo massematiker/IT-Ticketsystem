@@ -33,15 +33,15 @@
           <camunda:formField id="Problem" label="Problem" type="string" />
           <camunda:formField id="Kategorie" label="Kategorie" type="string" />
           <camunda:formField id="Komponente" label="Komponente" type="string" />
-          <camunda:formField id="Priorität" label="Priorität" type="string" />
+          <camunda:formField id="Prioritaet" label="Prioritaet" type="string" />
           <camunda:formField id="Datum" label="Datum" type="date" />
-          <camunda:formField id="Loesung_vorhanden" label="Lösung vorhanden" type="boolean" />
+          <camunda:formField id="Loesung_vorhanden" label="Loesung vorhanden" type="boolean" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1tuw236</bpmn:incoming>
       <bpmn:outgoing>Flow_0mr27y3</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:task id="Loesung_suchen" name="Lösung in Ticketsystem suchen">
+    <bpmn:task id="Loesung_suchen" name="Lsung in Ticketsystem suchen">
       <bpmn:incoming>Flow_0mr27y3</bpmn:incoming>
       <bpmn:outgoing>Flow_10s4kqk</bpmn:outgoing>
     </bpmn:task>
@@ -50,16 +50,16 @@
       <bpmn:outgoing>Flow_0yr52xc</bpmn:outgoing>
       <bpmn:outgoing>Flow_1gktsp0</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="Problem_loesen_" name="Problem Lösen wenn möglich">
+    <bpmn:userTask id="Problem_loesen_" name="Problem Loesen wenn moeglich">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="Problem_geloest" label="Problem gelöst" type="boolean" />
+          <camunda:formField id="Problem_geloest" label="Problem geloest" type="boolean" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0yr52xc</bpmn:incoming>
       <bpmn:outgoing>Flow_0v0n5b0</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:task id="Problem_loesen" name="Problem lösen">
+    <bpmn:task id="Problem_loesen" name="Problem loesen">
       <bpmn:incoming>Flow_1dowm30</bpmn:incoming>
       <bpmn:outgoing>Flow_1l93hhg</bpmn:outgoing>
     </bpmn:task>
@@ -77,7 +77,7 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="Datum behoben" label="Datum behoben" type="date" />
-          <camunda:formField id="Lösung" label="Lösung" type="string" />
+          <camunda:formField id="Loesung" label="Loesung" type="string" />
           <camunda:formField id="Bearbeiter" label="Bearbeiter" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
@@ -100,15 +100,15 @@
     <bpmn:sequenceFlow id="Flow_1l93hhg" sourceRef="Problem_loesen" targetRef="Gateway_1qseyol" />
     <bpmn:sequenceFlow id="Flow_0v0n5b0" name="//TODO Wenn bestimmte Zeit oder Ansprüche" sourceRef="Problem_loesen_" targetRef="Gateway_1nir6nd" />
     <bpmn:sequenceFlow id="Flow_0clqruq" sourceRef="Gateway_1qseyol" targetRef="Schliese_ticket" />
-    <bpmn:sequenceFlow id="Flow_1mufdxd" name="lösbar" sourceRef="Gateway_1nir6nd" targetRef="Gateway_1qseyol">
+    <bpmn:sequenceFlow id="Flow_1mufdxd" name="loesbar" sourceRef="Gateway_1nir6nd" targetRef="Gateway_1qseyol">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${Problem_geloest==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1t64he5" sourceRef="Schliese_ticket" targetRef="Event_1sjudzw" />
-    <bpmn:sequenceFlow id="Flow_0qkvvur" name="Abhängig von Kategorie und Komponente" sourceRef="Ticket_weiterleiten" targetRef="Activity_0hqcko1" />
+    <bpmn:sequenceFlow id="Flow_0qkvvur" name="Abhaengig von Kategorie und Komponente" sourceRef="Ticket_weiterleiten" targetRef="Activity_0hqcko1" />
     <bpmn:sequenceFlow id="Flow_1gktsp0" name="gefunden" sourceRef="Gateway_07rfzu9" targetRef="Lade_ticket">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${Loesung_vorhanden==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1lg44wf" name="nicht lösbar" sourceRef="Gateway_1nir6nd" targetRef="Ticket_weiterleiten">
+    <bpmn:sequenceFlow id="Flow_1lg44wf" name="nicht loesbar" sourceRef="Gateway_1nir6nd" targetRef="Ticket_weiterleiten">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${Problem_geloest==false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:task id="Lade_ticket" name="Lade Ticket">
