@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0p9qqvm" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.2.0">
+  <bpmn:collaboration id="Collaboration_1ebg3dg">
+    <bpmn:participant id="Participant_127dzpx" name="IT-Ticketsystem" processRef="Process_0w1z5fh" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_0w1z5fh" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_1omb3qy">
+      <bpmn:lane id="Lane_1308so5" name="First Level">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Problem_aufnehmen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_1nir6nd</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1sjudzw</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Problem_loesen_</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_1jwhsu7" name="Second Level">
+        <bpmn:flowNodeRef>Eingang_second</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_15f0spx" name="Thrid Level" />
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1" name="Eingehender Anruf">
+      <bpmn:outgoing>Flow_1tuw236</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Problem_aufnehmen" name="Problem aufnehmen" camunda:candidateGroups="FirstLevel">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="Problem" label="Problem" type="string" />
+          <camunda:formField id="Kategorie" label="Kategorie" type="string" />
+          <camunda:formField id="Komponente" label="Komponente" type="string" />
+          <camunda:formField id="Prioritaet" label="Prioritaet" type="long" />
+          <camunda:formField id="Datum" label="Datum" type="date" />
+          <camunda:formField id="Beschreibung" label="Beschreibung" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1tuw236</bpmn:incoming>
+      <bpmn:outgoing>Flow_0mr27y3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1tuw236" sourceRef="StartEvent_1" targetRef="Problem_aufnehmen" />
+    <bpmn:sequenceFlow id="Flow_0mr27y3" sourceRef="Problem_aufnehmen" targetRef="Problem_loesen_" />
+    <bpmn:sequenceFlow id="Flow_0v0n5b0" name="//TODO Wenn bestimmte Zeit oder Ansprüche" sourceRef="Problem_loesen_" targetRef="Gateway_1nir6nd" />
+    <bpmn:sequenceFlow id="Flow_1mufdxd" name="loesbar" sourceRef="Gateway_1nir6nd" targetRef="Event_1sjudzw">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${Problem_geloest==true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1lg44wf" name="nicht loesbar" sourceRef="Gateway_1nir6nd" targetRef="Eingang_second">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${Problem_geloest==false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_1nir6nd">
+      <bpmn:incoming>Flow_0v0n5b0</bpmn:incoming>
+      <bpmn:outgoing>Flow_1mufdxd</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1lg44wf</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Eingang_second" name="Bearbeitung Second Lvl" camunda:candidateUsers="SecondLevel">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="Weitere_bearbeitung" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1lg44wf</bpmn:incoming>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_1sjudzw">
+      <bpmn:incoming>Flow_1mufdxd</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="Problem_loesen_" name="${Problem}" camunda:candidateGroups="FirstLevel">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="datum_bearbeitet" label="Datum bearbeitet" type="date" />
+          <camunda:formField id="Bearbeiter" label="Bearbeiter" type="string" />
+          <camunda:formField id="Loesung" label="Loesung/Versuche" type="string" />
+          <camunda:formField id="Problem_geloest" label="Problem geloest" type="boolean" />
+          <camunda:formField id="Beschreibung_" label="Beschreibung" type="string" defaultValue="${Beschreibung}" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0mr27y3</bpmn:incoming>
+      <bpmn:outgoing>Flow_0v0n5b0</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1ebg3dg">
+      <bpmndi:BPMNShape id="Participant_127dzpx_di" bpmnElement="Participant_127dzpx" isHorizontal="true">
+        <dc:Bounds x="152" y="80" width="1098" height="760" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_15f0spx_di" bpmnElement="Lane_15f0spx" isHorizontal="true">
+        <dc:Bounds x="182" y="590" width="1068" height="250" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1jwhsu7_di" bpmnElement="Lane_1jwhsu7" isHorizontal="true">
+        <dc:Bounds x="182" y="370" width="1068" height="220" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1308so5_di" bpmnElement="Lane_1308so5" isHorizontal="true">
+        <dc:Bounds x="182" y="80" width="1068" height="290" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1lg44wf_di" bpmnElement="Flow_1lg44wf">
+        <di:waypoint x="1020" y="275" />
+        <di:waypoint x="1020" y="340" />
+        <di:waypoint x="320" y="340" />
+        <di:waypoint x="320" y="400" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="999" y="289" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1mufdxd_di" bpmnElement="Flow_1mufdxd">
+        <di:waypoint x="1020" y="225" />
+        <di:waypoint x="1020" y="150" />
+        <di:waypoint x="1132" y="150" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="994" y="90" width="38" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0v0n5b0_di" bpmnElement="Flow_0v0n5b0">
+        <di:waypoint x="770" y="250" />
+        <di:waypoint x="995" y="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="845" y="250" width="79" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0mr27y3_di" bpmnElement="Flow_0mr27y3">
+        <di:waypoint x="490" y="250" />
+        <di:waypoint x="670" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tuw236_di" bpmnElement="Flow_1tuw236">
+        <di:waypoint x="288" y="250" />
+        <di:waypoint x="390" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="252" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="238" y="275" width="64" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_14x1ngq_di" bpmnElement="Problem_aufnehmen">
+        <dc:Bounds x="390" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1nir6nd_di" bpmnElement="Gateway_1nir6nd" isMarkerVisible="true">
+        <dc:Bounds x="995" y="225" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09vmn9l_di" bpmnElement="Eingang_second">
+        <dc:Bounds x="270" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1sjudzw_di" bpmnElement="Event_1sjudzw">
+        <dc:Bounds x="1132" y="132" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1oh2ioa_di" bpmnElement="Problem_loesen_">
+        <dc:Bounds x="670" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
