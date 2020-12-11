@@ -42,11 +42,18 @@
       </extensionElements>
       <outgoing>sequenceFlow_363</outgoing>
     </startEvent>
-    <serviceTask id="erfolgsmeldung" name="Erfolgsmeldung senden" implementation="webService" camunda:expression="#{jobAnnouncementService.notifyAboutPostings(jobAnnouncementId)}">
+    <serviceTask id="erfolgsmeldung" name="Erfolgsmeldung senden" implementation="webService">
       <extensionElements>
         <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc" />
         <signavio:signavioMetaData metaKey="risklevel" metaValue="" />
         <signavio:signavioMetaData metaKey="externaldocuments" metaValue="" />
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">https://jsonplaceholder.typicode.com/Erfolg</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
       </extensionElements>
       <incoming>sequenceFlow_368</incoming>
       <outgoing>sequenceFlow_369</outgoing>
@@ -57,20 +64,18 @@
       </extensionElements>
       <incoming>sequenceFlow_369</incoming>
     </endEvent>
-    <callActivity id="ausschreibung" name="Durchführung der Ausschreibung" calledElement="camunda-testing-job-announcement-publication">
+    <callActivity id="ausschreibung" name="Durchführung der Ausschreibung" calledElement="stellePublizieren">
       <extensionElements>
         <signavio:signavioStencil id="CollapsedSubprocess" />
         <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc" />
         <signavio:signavioMetaData metaKey="externaldocuments" metaValue="[]" />
-        <camunda:in source="jobid" target="jobid" />
-        <camunda:in source="stepstone" target="stepstone" />
-        <camunda:in source="arbeitsagentur" target="arbeitsagentur" />
-        <camunda:in source="socialmedia" target="socialmedia" />
+        <camunda:in variables="all" />
+        <camunda:out variables="all" />
       </extensionElements>
       <incoming>sequenceFlow_367</incoming>
       <outgoing>sequenceFlow_368</outgoing>
     </callActivity>
-    <userTask id="pruefen" name="Stellenbeschreibung sichten" implementation="webService" camunda:assignee="#{jobAnnouncementService.findRequester(jobAnnouncementId)}">
+    <userTask id="pruefen" name="Stellenbeschreibung sichten" implementation="webService" camunda:candidateGroups="Management">
       <extensionElements>
         <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc" />
         <signavio:signavioMetaData metaKey="risklevel" metaValue="" />
@@ -101,23 +106,15 @@
               <camunda:constraint name="readonly" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="akzeptiert" label="Ausschreiben akzeptieren ?" type="boolean">
-            <camunda:validation>
-              <camunda:constraint />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="verbesserung" label="Verbesserungsvorschlag" type="string">
-            <camunda:validation>
-              <camunda:constraint />
-            </camunda:validation>
-          </camunda:formField>
+          <camunda:formField id="akzeptiert" label="Ausschreiben akzeptieren ?" type="boolean" />
+          <camunda:formField id="verbesserung" label="Verbesserungsvorschlag" type="string" />
         </camunda:formData>
       </extensionElements>
       <incoming>sequenceFlow_364</incoming>
       <incoming>sequenceFlow_366</incoming>
       <outgoing>sequenceFlow_365</outgoing>
     </userTask>
-    <userTask id="beschreiben" name="Stelle beschreiben" implementation="webService">
+    <userTask id="beschreiben" name="Stelle beschreiben" implementation="webService" camunda:candidateGroups="Personalabteilung">
       <extensionElements>
         <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc" />
         <signavio:signavioMetaData metaKey="risklevel" metaValue="" />
@@ -153,7 +150,7 @@
       <incoming>sequenceFlow_363</incoming>
       <outgoing>sequenceFlow_364</outgoing>
     </userTask>
-    <userTask id="korrigieren" name="Stellenbeschreibung korrigieren" implementation="webService" camunda:assignee="#{jobAnnouncementService.findEditor(jobAnnouncementId)}">
+    <userTask id="korrigieren" name="Stellenbeschreibung korrigieren" implementation="webService" camunda:candidateGroups="Personalabteilung">
       <extensionElements>
         <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc" />
         <signavio:signavioMetaData metaKey="risklevel" metaValue="" />
@@ -164,11 +161,6 @@
           <camunda:formField id="abteilung" label="Abteilung" type="string" />
           <camunda:formField id="beschreibung" label="Beschreibung" type="string" />
           <camunda:formField id="beginn" label="Beginn" type="date" />
-          <camunda:formField id="akzeptiert" label="Ausschreiben akzeptieren ?" type="boolean">
-            <camunda:validation>
-              <camunda:constraint name="readonly" />
-            </camunda:validation>
-          </camunda:formField>
           <camunda:formField id="verbesserung" label="Verbesserungsvorschlag" type="string">
             <camunda:validation>
               <camunda:constraint name="readonly" />
@@ -201,7 +193,7 @@
       <outgoing>ja_371</outgoing>
       <outgoing>nein_370</outgoing>
     </exclusiveGateway>
-    <userTask id="veroeffentlichen" name="Ausschreibung anstoßen" implementation="webService" camunda:candidateGroups="engineering">
+    <userTask id="veroeffentlichen" name="Ausschreibung anstoßen" implementation="webService" camunda:candidateGroups="Personalabteilung">
       <extensionElements>
         <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc" />
         <signavio:signavioMetaData metaKey="risklevel" metaValue="" />
@@ -223,7 +215,7 @@
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="stepstone" label="Stepstone" type="boolean" />
-          <camunda:formField id="srbeitsagentur" label="Arbeitsagentur" type="boolean" />
+          <camunda:formField id="arbeitsagentur" label="Arbeitsagentur" type="boolean" />
           <camunda:formField id="socialmedia" label="Social Media" type="boolean" />
         </camunda:formData>
       </extensionElements>
@@ -260,8 +252,8 @@
         <omgdi:waypoint x="1416" y="182" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="sequenceFlow_367_gui" bpmnElement="sequenceFlow_367" sourceElement="publish_gui" targetElement="publication_gui">
-        <omgdi:waypoint x="1034" y="386" />
-        <omgdi:waypoint x="1068.5" y="386" />
+        <omgdi:waypoint x="1035" y="379" />
+        <omgdi:waypoint x="1068.5" y="379" />
         <omgdi:waypoint x="1068.5" y="182" />
         <omgdi:waypoint x="1103" y="182" />
       </bpmndi:BPMNEdge>
@@ -285,10 +277,10 @@
       <bpmndi:BPMNEdge id="ja_371_gui" bpmnElement="ja_371" sourceElement="OK__335_gui" targetElement="publish_gui">
         <omgdi:waypoint x="690" y="594" />
         <omgdi:waypoint x="880" y="594" />
-        <omgdi:waypoint x="880" y="387" />
-        <omgdi:waypoint x="923" y="387" />
+        <omgdi:waypoint x="880" y="380" />
+        <omgdi:waypoint x="924" y="380" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="889" y="480" width="13" height="14" />
+          <omgdc:Bounds x="890" y="476" width="12" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="nein_370_gui" bpmnElement="nein_370" sourceElement="OK__335_gui" targetElement="correct_gui">
@@ -333,7 +325,7 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="publish_gui" bpmnElement="veroeffentlichen" isHorizontal="true">
-        <omgdc:Bounds x="923" y="347" width="111" height="79" />
+        <omgdc:Bounds x="924" y="340" width="111" height="79" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
