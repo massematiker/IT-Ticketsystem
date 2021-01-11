@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="sid-4897dfb4-f921-4ddc-8ac0-43f3a67ad714" targetNamespace="http://www.signavio.com/bpmn20" exporter="Camunda Modeler" exporterVersion="4.2.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+  <message id="sid-3cb3e5f5-137b-4be8-8629-4d2d78cc009d" name="" />
+  <collaboration id="Collaboration_02um9xt">
+    <participant id="MultiInstance" name="MultiInstance" processRef="Multi_Instance" />
+  </collaboration>
+  <process id="Multi_Instance" name="MultiInstance" isExecutable="true">
+    <startEvent id="Event_1m5fbyr">
+      <outgoing>Flow_13bpaxh</outgoing>
+    </startEvent>
+    <intermediateThrowEvent id="Event_0akzhrf">
+      <incoming>Flow_1mju3e5</incoming>
+    </intermediateThrowEvent>
+    <sequenceFlow id="Flow_1mju3e5" sourceRef="User_ausgeben" targetRef="Event_0akzhrf" />
+    <sequenceFlow id="Flow_13bpaxh" sourceRef="Event_1m5fbyr" targetRef="Activity_15d2wom" />
+    <sequenceFlow id="Flow_0tfyowl" sourceRef="Activity_15d2wom" targetRef="User_ausgeben" />
+    <userTask id="User_ausgeben" name="User_ausgeben">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="nam" label="Name" type="string" defaultValue="${user.name}" />
+          <camunda:formField id="old" label="Alter" type="long" defaultValue="${user.alter}" />
+          <camunda:formField id="quali" label="Qualifikation" type="string" defaultValue="${user.qualifikation}" />
+          <camunda:formField id="ansch" label="Anschreiben" type="string" defaultValue="${user.anschreiben}" />
+        </camunda:formData>
+      </extensionElements>
+      <incoming>Flow_0tfyowl</incoming>
+      <outgoing>Flow_1mju3e5</outgoing>
+      <multiInstanceLoopCharacteristics isSequential="true" camunda:collection="users" camunda:elementVariable="user" />
+    </userTask>
+    <serviceTask id="Activity_15d2wom" name="generateLIst">
+      <extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="userList">
+            <camunda:list>
+              <camunda:map>
+                <camunda:entry key="name">Max Maier</camunda:entry>
+                <camunda:entry key="alter">26</camunda:entry>
+                <camunda:entry key="qualifikation">java, c++</camunda:entry>
+                <camunda:entry key="anschreiben">Hallo, ich hätte gern den Job, Gruß Max</camunda:entry>
+              </camunda:map>
+              <camunda:map>
+                <camunda:entry key="name">Jens Müller</camunda:entry>
+                <camunda:entry key="alter">29</camunda:entry>
+                <camunda:entry key="qualifikation">python, pascal</camunda:entry>
+                <camunda:entry key="anschreiben">Hallo, ich hätte auch gern einen Job, Gruß Jens</camunda:entry>
+              </camunda:map>
+              <camunda:map>
+                <camunda:entry key="name">Thomas Müller</camunda:entry>
+                <camunda:entry key="alter">29</camunda:entry>
+                <camunda:entry key="qualifikation">python, javascript</camunda:entry>
+                <camunda:entry key="anschreiben">Hallo, ich hätte auch gern einen Job, Gruß Thomas</camunda:entry>
+              </camunda:map>
+            </camunda:list>
+          </camunda:inputParameter>
+          <camunda:outputParameter name="users">${userList}</camunda:outputParameter>
+        </camunda:inputOutput>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">https://jsonplaceholder.typicode.com/Stepstone</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </extensionElements>
+      <incoming>Flow_13bpaxh</incoming>
+      <outgoing>Flow_0tfyowl</outgoing>
+    </serviceTask>
+  </process>
+  <bpmndi:BPMNDiagram id="sid-34675459-0340-4c41-9d19-e1f49b540b24">
+    <bpmndi:BPMNPlane id="sid-d6abd6d7-5203-42cb-a86a-fd15d6fa02b8" bpmnElement="Collaboration_02um9xt">
+      <bpmndi:BPMNShape id="Participant_1tcnxqo_di" bpmnElement="MultiInstance" isHorizontal="true">
+        <omgdc:Bounds x="200" y="80" width="600" height="250" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0tfyowl_di" bpmnElement="Flow_0tfyowl">
+        <omgdi:waypoint x="460" y="230" />
+        <omgdi:waypoint x="540" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13bpaxh_di" bpmnElement="Flow_13bpaxh">
+        <omgdi:waypoint x="308" y="230" />
+        <omgdi:waypoint x="360" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1mju3e5_di" bpmnElement="Flow_1mju3e5">
+        <omgdi:waypoint x="640" y="230" />
+        <omgdi:waypoint x="666" y="230" />
+        <omgdi:waypoint x="666" y="220" />
+        <omgdi:waypoint x="692" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1m5fbyr_di" bpmnElement="Event_1m5fbyr">
+        <omgdc:Bounds x="272" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0akzhrf_di" bpmnElement="Event_0akzhrf">
+        <omgdc:Bounds x="692" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0dkjgqu_di" bpmnElement="User_ausgeben">
+        <omgdc:Bounds x="540" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0qqenfg_di" bpmnElement="Activity_15d2wom">
+        <omgdc:Bounds x="360" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
