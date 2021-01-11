@@ -137,13 +137,6 @@
           </camunda:inputParameter>
           <camunda:outputParameter name="users">${userList}</camunda:outputParameter>
         </camunda:inputOutput>
-        <camunda:connector>
-          <camunda:inputOutput>
-            <camunda:inputParameter name="url">https://jsonplaceholder.typicode.com/Stepstone</camunda:inputParameter>
-            <camunda:inputParameter name="method">POST</camunda:inputParameter>
-          </camunda:inputOutput>
-          <camunda:connectorId>http-connector</camunda:connectorId>
-        </camunda:connector>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1fibcn1</bpmn:incoming>
       <bpmn:outgoing>Flow_1fgbsbb</bpmn:outgoing>
@@ -320,6 +313,13 @@
         <di:waypoint x="240" y="309" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="249" y="207" width="82" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0nr6wdk_di" bpmnElement="Flow_0nr6wdk">
+        <di:waypoint x="1350" y="220" />
+        <di:waypoint x="1350" y="457" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1362" y="338" width="56" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
