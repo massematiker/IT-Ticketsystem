@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_11ytuhr" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.2.0">
+  <bpmn:process id="main" name="OnBoarding" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1h5q0d8</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:transaction id="Activity_1kmtrar">
+      <bpmn:incoming>Flow_1h5q0d8</bpmn:incoming>
+      <bpmn:outgoing>Flow_0hrgtg9</bpmn:outgoing>
+      <bpmn:startEvent id="Event_18dtgzk">
+        <bpmn:outgoing>Flow_0uf58bm</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_0uf58bm" sourceRef="Event_18dtgzk" targetRef="email" />
+      <bpmn:sequenceFlow id="Flow_0280qfq" sourceRef="email" targetRef="hardware" />
+      <bpmn:sequenceFlow id="Flow_0b4op7y" sourceRef="hardware" targetRef="probezeit" />
+      <bpmn:userTask id="probezeit" name="Ende Probezeit">
+        <bpmn:extensionElements>
+          <camunda:formData>
+            <camunda:formField id="bestanden" label="Probezeit bestanden?" type="boolean" />
+          </camunda:formData>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0b4op7y</bpmn:incoming>
+        <bpmn:outgoing>Flow_0z2azsq</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:exclusiveGateway id="Gateway_0x9bipg">
+        <bpmn:incoming>Flow_0z2azsq</bpmn:incoming>
+        <bpmn:outgoing>Flow_1nr663x</bpmn:outgoing>
+        <bpmn:outgoing>Flow_1lly2r6</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_0z2azsq" sourceRef="probezeit" targetRef="Gateway_0x9bipg" />
+      <bpmn:endEvent id="Event_0r9t0sl">
+        <bpmn:incoming>Flow_1nr663x</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1nr663x" name="bestanden" sourceRef="Gateway_0x9bipg" targetRef="Event_0r9t0sl">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{bestanden}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_1lly2r6" name="nicht bestanden" sourceRef="Gateway_0x9bipg" targetRef="Event_1dx3kkh">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{!bestanden}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:userTask id="Activity_0vrpzjd" name="Email löschen" isForCompensation="true" />
+      <bpmn:boundaryEvent id="Event_0dr6849" attachedToRef="email">
+        <bpmn:compensateEventDefinition id="CompensateEventDefinition_0xc4kaz" />
+      </bpmn:boundaryEvent>
+      <bpmn:userTask id="hardware" name="Hardware aushändigen">
+        <bpmn:extensionElements>
+          <camunda:formData>
+            <camunda:formField id="laptop" label="Laptop" type="boolean" />
+            <camunda:formField id="handy" label="Handy" type="boolean" />
+            <camunda:formField id="bildschirm" label="Bildschirm" type="boolean" />
+          </camunda:formData>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0280qfq</bpmn:incoming>
+        <bpmn:outgoing>Flow_0b4op7y</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:boundaryEvent id="Event_1usceeh" attachedToRef="hardware">
+        <bpmn:compensateEventDefinition id="CompensateEventDefinition_19ajr9x" />
+      </bpmn:boundaryEvent>
+      <bpmn:userTask id="hardwareBack" name="Hardware zurück" isForCompensation="true">
+        <bpmn:extensionElements>
+          <camunda:formData>
+            <camunda:formField id="laptop" label="Laptop" type="boolean" />
+            <camunda:formField id="handy" label="Handy" type="boolean" />
+            <camunda:formField id="bildschirm" label="Bildschirm" type="boolean" />
+          </camunda:formData>
+        </bpmn:extensionElements>
+      </bpmn:userTask>
+      <bpmn:serviceTask id="email" name="Email anlegen">
+        <bpmn:extensionElements>
+          <camunda:connector>
+            <camunda:inputOutput>
+              <camunda:inputParameter name="url">https://jsonplaceholder.typicode.com/Stepstone</camunda:inputParameter>
+              <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            </camunda:inputOutput>
+            <camunda:connectorId>http-connector</camunda:connectorId>
+          </camunda:connector>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0uf58bm</bpmn:incoming>
+        <bpmn:outgoing>Flow_0280qfq</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:endEvent id="Event_1dx3kkh">
+        <bpmn:incoming>Flow_1lly2r6</bpmn:incoming>
+        <bpmn:cancelEventDefinition id="CancelEventDefinition_06hlohc" />
+      </bpmn:endEvent>
+      <bpmn:association id="Association_07zpy7u" associationDirection="One" sourceRef="Event_0dr6849" targetRef="Activity_0vrpzjd" />
+      <bpmn:association id="Association_1w6ablh" associationDirection="One" sourceRef="Event_1usceeh" targetRef="hardwareBack" />
+    </bpmn:transaction>
+    <bpmn:sequenceFlow id="Flow_1h5q0d8" sourceRef="StartEvent_1" targetRef="Activity_1kmtrar" />
+    <bpmn:userTask id="absage" name="Absage versenden">
+      <bpmn:incoming>Flow_0i54tj4</bpmn:incoming>
+      <bpmn:outgoing>Flow_06bcxch</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_0h8sowh">
+      <bpmn:incoming>Flow_0hrgtg9</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0hrgtg9" sourceRef="Activity_1kmtrar" targetRef="Event_0h8sowh" />
+    <bpmn:sequenceFlow id="Flow_06bcxch" sourceRef="absage" targetRef="Event_1d20hly" />
+    <bpmn:endEvent id="Event_1d20hly">
+      <bpmn:incoming>Flow_06bcxch</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0i54tj4" sourceRef="Event_0hblnhl" targetRef="absage" />
+    <bpmn:boundaryEvent id="Event_0hblnhl" attachedToRef="Activity_1kmtrar">
+      <bpmn:outgoing>Flow_0i54tj4</bpmn:outgoing>
+      <bpmn:cancelEventDefinition id="CancelEventDefinition_0kxr4yi" />
+    </bpmn:boundaryEvent>
+  </bpmn:process>
+  <bpmn:error id="Error_1cymj57" name="nichtBestanden" errorCode="NB" camunda:errorMessage="Probezeit nicht bestanden" />
+  <bpmn:message id="Message_161znb1" name="toSub" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="main">
+      <bpmndi:BPMNEdge id="Flow_0i54tj4_di" bpmnElement="Flow_0i54tj4">
+        <di:waypoint x="790" y="388" />
+        <di:waypoint x="790" y="470" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06bcxch_di" bpmnElement="Flow_06bcxch">
+        <di:waypoint x="840" y="510" />
+        <di:waypoint x="912" y="510" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hrgtg9_di" bpmnElement="Flow_0hrgtg9">
+        <di:waypoint x="1110" y="210" />
+        <di:waypoint x="1192" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1h5q0d8_di" bpmnElement="Flow_1h5q0d8">
+        <di:waypoint x="218" y="210" />
+        <di:waypoint x="290" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_154s30n_di" bpmnElement="absage">
+        <dc:Bounds x="740" y="470" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_18i1ojr_di" bpmnElement="Event_1d20hly">
+        <dc:Bounds x="912" y="492" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0h8sowh_di" bpmnElement="Event_0h8sowh">
+        <dc:Bounds x="1192" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="182" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_10s7yt8_di" bpmnElement="Activity_1kmtrar" isExpanded="true">
+        <dc:Bounds x="290" y="60" width="820" height="310" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1lly2r6_di" bpmnElement="Flow_1lly2r6">
+        <di:waypoint x="910" y="195" />
+        <di:waypoint x="910" y="270" />
+        <di:waypoint x="1052" y="270" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="923" y="252" width="78" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nr663x_di" bpmnElement="Flow_1nr663x">
+        <di:waypoint x="935" y="170" />
+        <di:waypoint x="1052" y="170" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="969" y="152" width="52" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0z2azsq_di" bpmnElement="Flow_0z2azsq">
+        <di:waypoint x="840" y="170" />
+        <di:waypoint x="885" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0b4op7y_di" bpmnElement="Flow_0b4op7y">
+        <di:waypoint x="690" y="170" />
+        <di:waypoint x="740" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0280qfq_di" bpmnElement="Flow_0280qfq">
+        <di:waypoint x="530" y="170" />
+        <di:waypoint x="590" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0uf58bm_di" bpmnElement="Flow_0uf58bm">
+        <di:waypoint x="368" y="170" />
+        <di:waypoint x="430" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_18dtgzk_di" bpmnElement="Event_18dtgzk">
+        <dc:Bounds x="332" y="152" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0g9qmz7_di" bpmnElement="probezeit">
+        <dc:Bounds x="740" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0x9bipg_di" bpmnElement="Gateway_0x9bipg" isMarkerVisible="true">
+        <dc:Bounds x="885" y="145" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0r9t0sl_di" bpmnElement="Event_0r9t0sl">
+        <dc:Bounds x="1052" y="152" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1bp877o_di" bpmnElement="Activity_0vrpzjd">
+        <dc:Bounds x="510" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_04daqzl_di" bpmnElement="hardware">
+        <dc:Bounds x="590" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1wkycty_di" bpmnElement="hardwareBack">
+        <dc:Bounds x="740" y="250" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0riz8an_di" bpmnElement="email">
+        <dc:Bounds x="430" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_19qfa2v_di" bpmnElement="Event_1dx3kkh">
+        <dc:Bounds x="1052" y="252" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_19krqps_di" bpmnElement="Event_1usceeh">
+        <dc:Bounds x="652" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0rjvbs3_di" bpmnElement="Event_0dr6849">
+        <dc:Bounds x="462" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_07zpy7u_di" bpmnElement="Association_07zpy7u">
+        <di:waypoint x="480" y="228" />
+        <di:waypoint x="480" y="280" />
+        <di:waypoint x="510" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1w6ablh_di" bpmnElement="Association_1w6ablh">
+        <di:waypoint x="670" y="228" />
+        <di:waypoint x="670" y="290" />
+        <di:waypoint x="740" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1ij6p5p_di" bpmnElement="Event_0hblnhl">
+        <dc:Bounds x="772" y="352" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

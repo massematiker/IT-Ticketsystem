@@ -56,11 +56,11 @@
     <sequenceFlow id="Flow_1g2lrs8" sourceRef="parallelGateway_12" targetRef="parallelGateway_38">
       <conditionExpression xsi:type="tFormalExpression">#{!stepstone&amp;&amp;!arbeitsagentur}</conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="Flow_0suire8" name="Social Media ausgewaehlt" sourceRef="parallelGateway_12" targetRef="Gateway_0qc1i7w">
+    <sequenceFlow id="Flow_0suire8" name="Social Media ausgewaehlt" sourceRef="parallelGateway_12" targetRef="Gateway_1ixmew4">
       <conditionExpression xsi:type="tFormalExpression">#{socialmedia}</conditionExpression>
     </sequenceFlow>
     <parallelGateway id="Gateway_1ixmew4">
-      <incoming>Flow_1o1axbi</incoming>
+      <incoming>Flow_0suire8</incoming>
       <outgoing>Flow_1uhrf2p</outgoing>
       <outgoing>Flow_0zewdpm</outgoing>
     </parallelGateway>
@@ -134,19 +134,6 @@
       <conditionExpression xsi:type="tFormalExpression">#{arbeitsagentur}</conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="sequenceFlow_78" name="" isImmediate="true" sourceRef="Ausschreibung_Arbeitsagentur" targetRef="parallelGateway_38" />
-    <eventBasedGateway id="Gateway_0qc1i7w">
-      <incoming>Flow_0suire8</incoming>
-      <outgoing>Flow_11dkjyn</outgoing>
-    </eventBasedGateway>
-    <intermediateCatchEvent id="Event_0b581vg" name="Timer">
-      <incoming>Flow_11dkjyn</incoming>
-      <outgoing>Flow_1o1axbi</outgoing>
-      <timerEventDefinition id="TimerEventDefinition_1lq4tag">
-        <timeDuration xsi:type="tFormalExpression">10</timeDuration>
-      </timerEventDefinition>
-    </intermediateCatchEvent>
-    <sequenceFlow id="Flow_11dkjyn" sourceRef="Gateway_0qc1i7w" targetRef="Event_0b581vg" />
-    <sequenceFlow id="Flow_1o1axbi" sourceRef="Event_0b581vg" targetRef="Gateway_1ixmew4" />
   </process>
   <bpmndi:BPMNDiagram id="sid-830c5f5e-90b8-4b10-84fa-0fe5d466f2d0">
     <bpmndi:BPMNPlane id="sid-c40130ce-08e6-4f67-ae3d-774a7f6a3ead" bpmnElement="stellePublizieren">
@@ -165,19 +152,20 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0oen6vx_di" bpmnElement="Flow_0oen6vx">
-        <omgdi:waypoint x="910" y="405" />
-        <omgdi:waypoint x="910" y="185" />
-        <omgdi:waypoint x="925" y="185" />
+        <omgdi:waypoint x="855" y="410" />
+        <omgdi:waypoint x="910" y="410" />
+        <omgdi:waypoint x="910" y="210" />
+        <omgdi:waypoint x="933" y="193" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_194wu61_di" bpmnElement="Flow_194wu61">
         <omgdi:waypoint x="792" y="460" />
-        <omgdi:waypoint x="890" y="460" />
-        <omgdi:waypoint x="890" y="435" />
+        <omgdi:waypoint x="830" y="460" />
+        <omgdi:waypoint x="830" y="435" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1tmhwkv_di" bpmnElement="Flow_1tmhwkv">
         <omgdi:waypoint x="792" y="360" />
-        <omgdi:waypoint x="890" y="360" />
-        <omgdi:waypoint x="890" y="385" />
+        <omgdi:waypoint x="830" y="360" />
+        <omgdi:waypoint x="830" y="385" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0zewdpm_di" bpmnElement="Flow_0zewdpm">
         <omgdi:waypoint x="660" y="435" />
@@ -192,7 +180,7 @@
       <bpmndi:BPMNEdge id="Flow_0suire8_di" bpmnElement="Flow_0suire8">
         <omgdi:waypoint x="520" y="205" />
         <omgdi:waypoint x="520" y="410" />
-        <omgdi:waypoint x="535" y="410" />
+        <omgdi:waypoint x="635" y="410" />
         <bpmndi:BPMNLabel>
           <omgdc:Bounds x="528" y="336" width="64" height="27" />
         </bpmndi:BPMNLabel>
@@ -228,15 +216,6 @@
         <omgdi:waypoint x="185" y="184" />
         <omgdi:waypoint x="260" y="184" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_11dkjyn_di" bpmnElement="Flow_11dkjyn">
-        <omgdi:waypoint x="560" y="435" />
-        <omgdi:waypoint x="560" y="462" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1o1axbi_di" bpmnElement="Flow_1o1axbi">
-        <omgdi:waypoint x="569" y="465" />
-        <omgdi:waypoint x="600" y="410" />
-        <omgdi:waypoint x="635" y="410" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="startEvent_1_gui" bpmnElement="startEvent_1">
         <omgdc:Bounds x="155" y="169" width="30" height="30" />
       </bpmndi:BPMNShape>
@@ -249,8 +228,8 @@
       <bpmndi:BPMNShape id="endEvent_64_gui" bpmnElement="endEvent_64">
         <omgdc:Bounds x="1046" y="171" width="28" height="28" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_01750zk_di" bpmnElement="Gateway_0zap33z">
-        <omgdc:Bounds x="865" y="385" width="50" height="50" />
+      <bpmndi:BPMNShape id="Gateway_1fxo9u2_di" bpmnElement="Gateway_1ixmew4">
+        <omgdc:Bounds x="635" y="385" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0gi768h_di" bpmnElement="Activity_0gi768h">
         <omgdc:Bounds x="692" y="320" width="100" height="80" />
@@ -267,17 +246,8 @@
       <bpmndi:BPMNShape id="Anzeige_auf_Facebook_Page_publizieren_gui" bpmnElement="Ausschreibung_Arbeitsagentur">
         <omgdc:Bounds x="692" y="195" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_040s7ju_di" bpmnElement="Gateway_0qc1i7w">
-        <omgdc:Bounds x="535" y="385" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1fxo9u2_di" bpmnElement="Gateway_1ixmew4">
-        <omgdc:Bounds x="635" y="385" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0b581vg_di" bpmnElement="Event_0b581vg">
-        <omgdc:Bounds x="542" y="462" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="546" y="505" width="29" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="Gateway_01750zk_di" bpmnElement="Gateway_0zap33z">
+        <omgdc:Bounds x="805" y="385" width="50" height="50" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
